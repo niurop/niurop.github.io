@@ -1,0 +1,134 @@
+<link rel="stylesheet" type="text/css" href="style.css"/>
+<meta charset="UTF-8">
+<title>Symbol table to Xkb translator</title>
+<h1>Symbol table to Xkb translator.</h1>
+<p>For finished script visit my github.</p>
+<h3>Motivation</h3>
+<p>As mathematician, I use quite wide range of symbols on a daily basis.<br/>
+To allow myself more expressive power, while writing my thoughts down, and to relief my mind from having to remember wired codes or necessity for copy-pasting individual symbols,<br/>
+I've created a simple solution.</p>
+<p>Just create key mapping in the simplest form and convert it to xkb layout.</p>
+<p>Like in good old days of virtual consoles.</p>
+
+<h3>My layout as example:</h3>
+<pre>
+k K    n N a A c C b B
+~ TLDE ` ~ ¬ ∨ ∧ ⊢ ⇒ ⇔
+1 AE01 1 !     ¹ ₁ 𝟙 ⒈
+2 AE02 2 @     ² ₂   ⒉
+3 AE03 3 #     ³ ₃   ⒊
+4 AE04 4 $     ⁴ ₄   ⒋
+5 AE05 5 %     ⁵ ₅   ⒌
+6 AE06 6 ^     ⁶ ₆   ⒍
+7 AE07 7 &     ⁷ ₇   ⒎
+8 AE08 8 * ∗ × ⁸ ₈   ⒏
+9 AE09 9 ( ° ÷ ⁹ ₉   ⒐
+0 AE10 0 ) ∘ ∙ ⁰ ₀ ∅ ∞
+- AE11 - _ ± ∓ ⁻ ₋    
+= AE12 = + ≡ ≈ ⁺ ₊ ≔ ≠
+Q AD01 q Q □ ■ √ ∎ ℚ  
+W AD02 w W     ς Σ    
+E AD03 e E ę Ę ε   ∃  
+R AD04 r R     ρ Ρ ℝ ®
+T AD05 t T ⊥ ⊤ τ ∴ 𝕋 𝒯
+Y AD06 y Y     υ      
+U AD07 u U ⋃ ⋂ θ Θ    
+I AD08 i I     ι ∫    
+O AD09 o O ó Ó ✓ ✗    
+P AD10 p P § ¶ π Π ℙ  
+[ AD11 [ { 〖 〔        
+] AD12 ] } 〗 〕        
+| BKSL \ | / − ∤      
+A AC01 a A ą Ą α ∢ ∀  
+S AC02 s S ś Ś σ Σ 𝕊  
+D AC03 d D ∂ ∇ δ Δ ◊  
+F AC04 f F     φ Φ 𝔽  
+G AC05 g G     γ Γ    
+H AC06 h H     η      
+J AC07 j J     ξ Ξ    
+K AC08 k K     κ   𝕂  
+L AC09 l L ł Ł λ Λ   ℒ
+; AC10 ; :            
+' AC11 ' " „ ”        
+Z AB01 z Z ż Ż ζ   ℤ  
+X AB02 x X ź Ź χ      
+C AB03 c C ć Ć ψ Ψ ℂ ©
+V AB04 v V     ω Ω 𝕍 𝒱
+B AB05 b B ○ ● β ∵ 𝔹 ℬ
+N AB06 n N ń Ń ν   ℕ  
+M AB07 m M     μ      
+, AB08 , < ≤ ≼ ⊂ ⊆ ∈ ∉
+. AB09 . > ≥ ≽ ⊃ ⊇ ∋ ∌
+/ AB10 / ? ¿ ⏎        
+s SPCE ␠   ␣ ⍽ ⋯ ⋮ ⋰ ⋱
+\ LSGT → ↯ ↑ ↓ ↗ ↘ … ∥
+k K    n N a A c C b B
+  NoSymbol
+␠ space
+  nobreakspace
+</pre>
+<p>First line serves as a guide mask where:</p>
+<ul>
+<li>k - column of keys on keyboard.</li>
+<li>K - codes of keys in xkb layout(should be the same for most people).</li>
+<li>n - symbols printed without modifiers.</li>
+<li>N - symbols with level modifier (usually Shift/Caps lock).</li>
+<li>a - symbols printed with group modifier(usually right Alt).</li>
+<li>A - symbols printed with group and level modifiers.</li>
+<li>c - symbols printed with layout switch (right Ctrl for me).</li>
+<li>C - symbols printed with layout switch and level modifier.</li>
+<li>b - symbols printed with layout switch and group modifier.</li>
+<li>B - symbols printed with layout switch and group+level modifiers.</li>
+</ul>
+<p>Next are the lines with mappings for each key.<br/>
+Note, that although not every symbol is printed in the correct column(due to wide characters), spacing is still relevant and defines column placement for the script.</p>
+<p>After that the first line is repeated to indicate the end of mappings and help distinguish columns.</p>
+<p>And finally we have list of mappings of symbols to special names such as space to NoSymbol(needed for unspecified combinations) or ␠ to space(to solve problem of space character being taken).</p>
+<p>After "␠" is "nobreakspace" that is printed as normal space here(it is distinguished in vim with "set list" command).</p>
+
+<h3>The script:</h3>
+<p>Creating table shown above was the hardest part for me(all those decisions), but the actual translation script is more important part.</p>
+<p>We can leverage many assumptions and simplifications in our code that arise from the way we defined our table of symbols and how xkb layout is structured.</p>
+<p>I am using python3.6, but you can use anything you like(same principles apply).</p>
+<p>Firstly we open a specified file(I will be getting one as a command line argument using argv form sys library).<br/>
+I hope for the file to be of reasonable size, so I am also reading all the lines to a list.</p>
+<pre>
+from sys import argv
+with open(argv[1]) as file:
+  lines = file.read().splitlines()
+  mask = lines[0]
+  divider = 1 + lines[1:].index(mask)
+  indexesToRead = [mask.index(s) for s in argv[2]]
+</pre>
+<p>After some basic preparations we want to prepare translation table specified under symbols table<br/>
+If the symbol to be translated does not appear in translation table we will use its unicode value.</p>
+<pre>
+  symbols = {}
+  for definition in lines[1 + divider:]:
+    symbols[definition[0]] = definition[2:]
+  translate = lambda s: symbols.get(s, 'U' + hex(ord(s))[2:])
+</pre>
+<p>And finally we compose the output using string formatting.</p>
+<pre>
+  output = 'default  partial\nxkb_symbols "basic" {\n'
+  for line in lines[1:divider]:
+    output += '\tkey <{}> {{ [{} ] }};\n'.format(line[indexesToRead[0]:indexesToRead[0]+4],
+      ','.join([' '+(translate(line[i]) if i&ltlen(line) else 'NoSymbol') for i in indexesToRead[1:]]))
+  output += '\tinclude "level3(ralt_switch)"\n};'
+  print(output)
+</pre>
+<p>Notice the 'include "level3(ralt_switch)"' at the end.<br/>
+It basically makes right Alt be the group switch(you can change or even remove as you wish[refer to xkb manual]).</p>
+<p>I decided to generate two files with this method, but with simple changes one can compact it to just one file.</p>
+<p>This is a possible Makefile in bash with right Ctrl to change layouts.</p>
+<pre>
+set:
+	python3.6 main.py layout KnNaA &gtspecial_base
+	python3.6 main.py layout KcCbB &gtspecial_expand
+	sudo mv special_base /usr/share/X11/xkb/symbols/
+	sudo mv special_expand /usr/share/X11/xkb/symbols/
+	sudo setxkbmap -layout special_base,special_expand -option grp:rctrl_switch
+</pre>
+<h3>Conclusion:</h3>
+<p>This should be sufficient for basic usage.</p>
+<p>I suggest further reading on xkb and X11 to deepen your understanding of this system.</p>
