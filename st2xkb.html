@@ -82,16 +82,16 @@ k K    n N a A c C b B
 </ul>
 <p>Next are the lines with mappings for each key.<br/>
 Note, that although not every symbol is printed in the correct column(due to wide characters), spacing is still relevant and defines column placement for the script.</p>
-<p>After that the first line is repeated to indicate the end of mappings and help distinguish columns.</p>
+<p>After that the first line is repeated to indicate the end of mappings and help distinguish the columns.</p>
 <p>And finally we have list of mappings of symbols to special names such as space to NoSymbol(needed for unspecified combinations) or ␠ to space(to solve problem of space character being taken).</p>
 <p>After "␠" is "nobreakspace" that is printed as normal space here(it is distinguished in vim with "set list" command).</p>
 
 <h3>The script:</h3>
-<p>Creating table shown above was the hardest part for me(all those decisions), but the actual translation script is more important part.</p>
+<p>Creating table given above was the hardest part for me(all those decisions), but the actual translation script is the more important part.</p>
 <p>We can leverage many assumptions and simplifications in our code that arise from the way we defined our table of symbols and how xkb layout is structured.</p>
 <p>I am using python3.6, but you can use anything you like(same principles apply).</p>
 <p>Firstly we open a specified file(I will be getting one as a command line argument using argv form sys library).<br/>
-I hope for the file to be of reasonable size, so I am also reading all the lines to a list.</p>
+I hope for the file to be of reasonable size, so I am also reading all of its lines to a list.</p>
 <pre>
 from sys import argv
 with open(argv[1]) as file:
@@ -100,7 +100,7 @@ with open(argv[1]) as file:
   divider = 1 + lines[1:].index(mask)
   indexesToRead = [mask.index(s) for s in argv[2]]
 </pre>
-<p>After some basic preparations we want to prepare translation table specified under symbols table<br/>
+<p>After some basic preparations we want to prepare translation table specified under the symbols table<br/>
 If the symbol to be translated does not appear in translation table we will use its unicode value.</p>
 <pre>
   symbols = {}
@@ -118,8 +118,8 @@ If the symbol to be translated does not appear in translation table we will use 
   print(output)
 </pre>
 <p>Notice the 'include "level3(ralt_switch)"' at the end.<br/>
-It basically makes right Alt be the group switch(you can change or even remove as you wish[refer to xkb manual]).</p>
-<p>I decided to generate two files with this method, but with simple changes one can compact it to just one file.</p>
+It basically makes right Alt the group switch(you can change or even remove it as you wish[refer to xkb manual for more details]).</p>
+<p>I decided to generate two files with this method, but with simple changes one can compact it to gennerating just one file.</p>
 <p>This is a possible Makefile in bash with right Ctrl to change layouts.</p>
 <pre>
 set:
