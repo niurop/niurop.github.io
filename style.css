@@ -124,7 +124,8 @@ div.inner { padding: 2px 10px 2px 10px; }
     padding-top: 0;
     position:    relative;
   }
-  img { max-width: 80%; }
+  img { max-width: 81%;  }
+  h1  { font-size: 8ch; }
 }
 
 p.disclamer {
