@@ -1,215 +1,134 @@
-@media print {
-  *,
-  *:before,
-  *:after {
-    background: transparent !important;
-    color: #000 !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
+/* {
+  border: 1px dashed black;
+  box-sizing: border-box;
+}*/
 
-  a,
-  a:visited {
-    text-decoration: underline;
-  }
+body { background: white; }
+a.box { background: linear-gradient(to bottom, transparent, white 75%); }
 
-  a[href]:after {
-    content: " (" attr(href) ")";
-  }
-
-  abbr[title]:after {
-    content: " (" attr(title) ")";
-  }
-
-  a[href^="#"]:after,
-  a[href^="javascript:"]:after {
-    content: "";
-  }
-
-  pre,
-  blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid;
-  }
-
-  thead {
-    display: table-header-group;
-  }
-
-  tr,
-  img {
-    page-break-inside: avoid;
-  }
-
-  img {
-    max-width: 100% !important;
-  }
-
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3;
-  }
-
-  h2,
-  h3 {
-    page-break-after: avoid;
-  }
-}
-
-pre,
-code {
-  font-family: Menlo, Monaco, "Courier New", monospace;
-}
-
-pre {
-  padding: .5rem;
-  line-height: 1.25;
-  overflow-x: scroll;
-}
-
-a,
-a:visited {
-  color: #3498db;
-}
-
-a:hover,
-a:focus,
-a:active {
-  color: #2980b9;
-}
-
-.modest-no-decoration {
-  text-decoration: none;
-}
-
-html {
-  font-size: 12px;
-}
-
-@media screen and (min-width: 32rem) and (max-width: 48rem) {
-  html {
-    font-size: 15px;
-  }
-}
-
-@media screen and (min-width: 48rem) {
-  html {
-    font-size: 16px;
-  }
-}
 
 body {
-  line-height: 1.85;
+  display: block;
+  margin:  auto;
 }
 
-p,
-.modest-p {
-  font-size: 1rem;
-  margin-bottom: 1.3rem;
+body { max-width: 1000px; }
+@media only screen and (max-width: 1000px) { body { margin: 5px; } }
+
+@font-face {
+    font-family: 'Frederica';
+    src: url('FrederickatheGreat-Regular.ttf');
 }
 
-h1,
-.modest-h1,
-h2,
-.modest-h2,
-h3,
-.modest-h3,
-h4,
-.modest-h4 {
-  margin: 1.414rem 0 .5rem;
-  font-weight: inherit;
-  line-height: 1.42;
+h1,h2,h3 { text-align: center; }
+
+h1 { 
+  font-size: 10ch; 
+  font-family: Frederica, Baskerville, "Baskerville Old Face", "Goudy Old Style", Garamond, "Times New Roman", serif;
+  font-weight: 550;
 }
 
-h1,
-.modest-h1 {
-  margin-top: 0;
-  font-size: 3.998rem;
+h2 {
+  font-size: 4ch;
+  margin-top: 20px;
+  font-family: Frederica, Baskerville, "Baskerville Old Face", "Goudy Old Style", Garamond, "Times New Roman", serif;
+  font-weight: 550;
+  margin-bottom: 20px;
 }
 
-h2,
-.modest-h2 {
-  font-size: 2.827rem;
+a, p {
+  text-align: justify;
+  font-family: "Arial Narrow", Arial, "Helvetica Condensed", Helvetica, sans-serif;
+  font-size:  18px;
 }
 
-h3,
-.modest-h3 {
-  font-size: 1.999rem;
-}
-
-h4,
-.modest-h4 {
-  font-size: 1.414rem;
-}
-
-h5,
-.modest-h5 {
-  font-size: 1.121rem;
-}
-
-h6,
-.modest-h6 {
-  font-size: .88rem;
-}
-
-small,
-.modest-small {
-  font-size: .707em;
-}
-
-/* https://github.com/mrmrs/fluidity */
-
-img,
-canvas,
-iframe,
-video,
-svg,
-select,
-textarea {
-  max-width: 100%;
-}
-
-html {
-  font-size: 20px;
-  max-width: 100%;
-}
-
-body {
-  color: #444;
-  /*font-family: /*Antipasto, /*'Open Sans', sans-serif*/;
-  font-weight: 300;
-  margin: 0 auto;
-  max-width: 48rem;
-  line-height: 1.45;
-  padding: .25rem;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: Arimo, Helvetica, sans-serif;
-}
-
-h1,
-h2,
-h3 {
-  border-bottom: 2px solid #fafafa;
-  margin-bottom: 1.15rem;
-  padding-bottom: .5rem;
+a.box {
+  position: absolute;
+  bottom: 0;
   text-align: center;
+  padding-top: 5ch;
+  font-size: 2.5ch;
+  color: gray;
+  font-weight: bolder;
 }
 
-blockquote {
-  border-left: 8px solid #fafafa;
-  padding: 1rem;
+a.lang {
+  float:right;
+  font-size: 2.5ch;
+  color: gray;
+  font-weight: bolder;
 }
 
-pre,
-code {
-  background-color: #fafafa;
+a:hover { color: black; }
+
+hr {
+  border: 0;
+  height: 1px;
+  width : 100%;
 }
+
+hr.big   { background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0)); }
+hr.small { background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)); }
+
+img {
+  max-width:  100%;
+  max-height: 100%;
+  margin:     auto;
+  display:    block;
+}
+
+div[class*=box_] {
+  display:  block;
+  overflow: hidden;
+  max-height: 100%;
+  max-width:  100%;
+}
+
+div.box_left  { float: left;  }
+div.box_right { float: right; }
+
+div.inner { padding: 2px 10px 2px 10px; }
+
+[class *= "height_"] {
+  height:   0;
+  width:    100%;
+  position: relative;
+}
+
+.height_1  { padding-top: 8.33%;  } .height_2  { padding-top: 16.66%; } .height_3  { padding-top: 25%;    }
+.height_4  { padding-top: 33.33%; } .height_5  { padding-top: 41.66%; } .height_6  { padding-top: 50%;    }
+.height_7  { padding-top: 58.33%; } .height_8  { padding-top: 66.66%; } .height_9  { padding-top: 75%;    }
+.height_10 { padding-top: 83.33%; } .height_11 { padding-top: 91.66%; } .height_12 { padding-top: 100%;   }
+
+.height_inner1 {
+  position: absolute;
+  height:   100%;
+  top:      0;
+}
+
+.height_inner2 {
+  position:   relative;
+  height:     100%;
+  overflow-y: hidden;
+}
+
+.col_1  { width: 8.33%;  } .col_2  { width: 16.66%; } .col_3  { width: 25%;    }
+.col_4  { width: 33.33%; } .col_5  { width: 41.66%; } .col_6  { width: 50%;    }
+.col_7  { width: 58.33%; } .col_8  { width: 66.66%; } .col_9  { width: 75%;    }
+.col_10 { width: 83.33%; } .col_11 { width: 91.66%; } .col_12 { width: 100%;   }
+
+@media only screen and (max-width: 768px) {
+  [class *= "col_"] { width: 100%; }
+  [class *= "height_"] { 
+    height:      auto;
+    padding-top: 0;
+    position:    relative;
+  }
+  img { max-width: 80%; }
+}
+
+p.disclamer {
+  padding: 1px 10px 1px 10px;
+  font-size: 13px;
+}
+
